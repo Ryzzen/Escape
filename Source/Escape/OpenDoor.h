@@ -21,8 +21,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void OpenDoor();
-	void CloseDoor();
+	void OpenDoor() const;
+	void CloseDoor() const;
 
 public:	
 	// Called every frame
@@ -37,6 +37,5 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* Trigger;
 
-	UPROPERTY(EditAnywhere)
 	AActor* DoorOwner;
 };
