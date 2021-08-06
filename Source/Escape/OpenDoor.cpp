@@ -17,7 +17,6 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	DoorOwner = GetWorld()->GetFirstPlayerController()->GetPawn();
 	Owner = GetOwner();
 }
 
@@ -27,12 +26,10 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (GetTotalMassOnTrigger() >= MassOpenThreashold) {
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
-	}
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
-		CloseDoor();
+	if (GetTotalMassOnTrigger() >= MassOpenThreashold)
+		OnOpen.Broadcast();
+	else
+		OnClose.Broadcast();
 }
 
 float UOpenDoor::GetTotalMassOnTrigger() const
@@ -50,14 +47,3 @@ float UOpenDoor::GetTotalMassOnTrigger() const
 
 	return TotalMass;
 }
-
-void UOpenDoor::OpenDoor() const
-{
-	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
-}
-
-void UOpenDoor::CloseDoor() const
-{
-	Owner->SetActorRotation(FRotator(0.f, CloseAngle, 0.f));
-}
-
