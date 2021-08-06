@@ -27,12 +27,28 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (Trigger && Trigger->IsOverlappingActor(DoorOwner)) {
+	if (GetTotalMassOnTrigger() >= MassOpenThreashold) {
 		OpenDoor();
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
 	}
 	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
 		CloseDoor();
+}
+
+float UOpenDoor::GetTotalMassOnTrigger() const
+{
+	if (!Trigger)
+		return 0.0f;
+
+	float TotalMass = 0.f;
+
+	TArray<AActor *> Actors;
+	Trigger->GetOverlappingActors(Actors);
+
+	for (const auto &Actor : Actors)
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+
+	return TotalMass;
 }
 
 void UOpenDoor::OpenDoor() const

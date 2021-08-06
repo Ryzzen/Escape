@@ -29,19 +29,24 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+	float GetTotalMassOnTrigger() const;
+
 	UPROPERTY(EditAnywhere)
 	float OpenAngle = 90.f;
 
 	float CloseAngle = 0.f;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* Trigger;
+	ATriggerVolume* Trigger = nullptr;
 
-	AActor* DoorOwner;
-	AActor* Owner;
+	AActor* DoorOwner = nullptr;
+	AActor* Owner = nullptr;
 
 	float LastDoorOpenTime = 0.f;
 
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	float MassOpenThreashold = 150.f;
 };
